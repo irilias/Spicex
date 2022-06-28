@@ -1,0 +1,73 @@
+﻿@model IList<CategoryViewModel>
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var hasGategories = Model != null && Model.Count > 0;
+}
+
+<div class="container mt-5">
+    <h1 class="text-info">Create a Sub-Category</h1>
+    @if (hasGategories)
+    {
+        <form class="border p-5 bg-light" method="post" asp-action="Create">
+            <div class="form-group row">
+                <label asp-for="@Model.First().Name" class="col-sm-2 col-form-label">Category</label>
+                <div dropdown-category class="btn-group col-sm-6 p-0">
+                    <button type="button" class="btn btn-primary dropdown-toggle" data-mdb-toggle="dropdown" aria-expanded="false">
+                        Choose a category
+                    </button>
+                    <ul dropdown-menu-category class="dropdown-menu dropdown-menu-end">
+                        @foreach (var category in Model)
+                        {
+                            <li><a dropdown-menu-category-item class="dropdown-item" data-value="@category.Id">@category.Name</a></li>
+                        }
+                    </ul>
+                </div>
+                <input type="hidden" id="selectedCategoryId" name="selectedCategoryId" />
+            </div>
+            <div id="subCategoriesList" class="form-group row">
+            </div>
+        </form>
+    }
+    else
+    {
+        <div class="ml-3">
+            @if (ViewData["Error"] != null)
+            {
+                <p class="text-danger">
+                    @ViewData["Error"]
+                </p>
+            }
+            else
+            {
+                <p class="text-danger">
+                    No Categories have been found.
+                    <br />Please create a Category to be able to create its sub-categories.
+                </p>
+            }
+
+        </div>
+    }
+
+</div>
+
+
+@section scripts {
+    <partial name="~/Views/Shared/_ValidationScriptsPartial.cshtml" />
+    <script>
+        $("a[dropdown-menu-category-item]").click(function (e) {
+            $("#selectedCategoryId").attr("value", e.target.dataset.value);
+            $("div[dropdown-category]").find('button.dropdown-toggle').html(e.target.textContent);
+            $("#subCategoriesList").empty();
+             var _url = '@Url.Action("GetSubcategoriesList", "Subcategory")';
+                $.ajax({
+                    type: "GET",
+                    url: _url,
+                    data: { categoryId: e.target.dataset.value },
+                    success: function (result) {
+                        $("#subCategoriesList").html(result);
+                    },
+                });
+        })
+    </script>
+}

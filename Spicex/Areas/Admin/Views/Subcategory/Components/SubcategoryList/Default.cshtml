@@ -1,0 +1,27 @@
+﻿
+@model IList<SubcategoryViewModel>
+@{ 
+    var hasSubcategories = Model != null && Model.Count > 0;
+}
+
+    <label asp-for="@Model.First().Name" class="col-sm-2 col-form-label">Sub-Category</label>
+    <div dropdown-category class="btn-group col-sm-6 p-0">
+        <button type="button" class="btn btn-primary dropdown-toggle" data-mdb-toggle="dropdown" aria-expanded="false">
+            @if (hasSubcategories)
+            {
+                <span>Sub-Categories</span>
+            }
+            else
+            {
+                <span>Create new Sub-Category</span>
+            }
+        </button>
+        <ul dropdown-menu-category class="dropdown-menu dropdown-menu-end">
+            @foreach (var category in Model)
+            {
+                <li><a dropdown-menu-category-item class="dropdown-item" data-value="@category.Id">@category.Name</a></li>
+            }
+            <li><input type="text" placeholder="Type in new sub-category's name." class="dropdown-item" name="newSubcategoryName"/></li>
+            <li><button type="submit" dropdown-menu-category-item class="btn dropdown-item">Create new</button></li>
+        </ul>
+    </div>

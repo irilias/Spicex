@@ -1,0 +1,50 @@
+﻿@model IList<Spicex.Models.CategoryViewModel>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var hasSubcategories = Model.Count > 0 && Model.Any(c => c.HasSubcategories);
+}
+
+
+<div class="container mt-5">
+    <div class="centerElement">
+        <h1 class="text-info col-10" style="display:inline;">Sub-Categories</h1>
+        <partial name="~/Views/Shared/_CreateNewRecordButton.cshtml" />
+    </div>
+
+    @if (hasSubcategories)
+    {
+        <table class="table bg-white table-hover mt-5">
+            <thead class="thead-dark">
+                <tr>
+                    <th colspan="2">@Html.DisplayNameFor(c => c.First().Name)</th>
+                </tr>
+                <tr>
+                    <th colspan="2">@Html.DisplayNameFor(c => c.First().Subcategories.First().Name)</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var category in Model)
+                {
+                    <tr>
+                        <td class="col-10">@Html.DisplayFor(c => category.Name)</td>
+                        <td class="col-10">@Html.DisplayFor(c => category.Id)</td>
+                        <td class="col-2">
+                            <button class="btn btn-primary btn-sm"><span class="fas fa-edit"></span></button>
+                            <button class="btn btn-info btn-sm"><span class="fas fa-list"></span></button>
+                            <button class="btn btn-danger btn-sm"><span class="fas fa-trash"></span></button>
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <div class="ml-3">
+            <p class="text-success">Sub-Categories' list is empty..</p>
+        </div>
+    }
+</div>
+
